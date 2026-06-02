@@ -1,6 +1,6 @@
 name: Loan Approval Model Training
 
-python_env: conda.yaml
+conda_env: conda.yaml
 
 entry_points:
   main:
