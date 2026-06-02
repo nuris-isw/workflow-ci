@@ -33,7 +33,7 @@ jobs:
         with:
           activate-environment: loan-approval-env
           environment-file: MLProject/conda.yaml
-          auto-activate-base: false
+          auto-activate: false
 
       # -------------------------------------------------------
       # Jalankan pelatihan via MLflow Project
@@ -43,7 +43,7 @@ jobs:
         run: |
           mlflow run MLProject/ \
             --env-manager conda \
-            -P data_path=loan_approval_preprocessing.csv \
+            -P data_path=../loan_approval_preprocessing.csv \
             -P n_estimators=200 \
             -P max_depth=10 \
             -P random_state=42
@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: loan-approval-model
-          path: mlruns/
+          path: run_id.txt
           retention-days: 30
 
       # -------------------------------------------------------
@@ -70,12 +70,11 @@ jobs:
       - name: Build Docker Image via mlflow build-docker
         shell: bash -el {0}
         run: |
-          # Ambil run_id terbaru dari mlruns
-          RUN_ID=$(ls -t mlruns/0/ | grep -v 'meta.yaml' | head -1)
+          RUN_ID=$(cat run_id.txt)
           echo "Run ID: $RUN_ID"
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           mlflow models build-docker \
-            -m "mlruns/0/$RUN_ID/artifacts/model" \
+            -m "runs:/$RUN_ID/model" \
             -n "${{ secrets.DOCKERHUB_USERNAME }}/loan-approval-model:latest" \
             --enable-mlserver
 

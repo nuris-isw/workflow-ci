@@ -87,7 +87,11 @@ def main():
     dagshub.init(repo_owner=DAGSHUB_OWNER, repo_name=DAGSHUB_REPO, mlflow=True)
     mlflow.set_experiment("Loan_Approval_CI")
 
-    with mlflow.start_run():
+    with mlflow.start_run() as run:
+        # Tulis run_id ke file agar dapat digunakan oleh GitHub Actions
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(script_dir, "run_id.txt"), "w") as f:
+            f.write(run.info.run_id)
         # Manual logging
         mlflow.log_param("n_estimators", args.n_estimators)
         mlflow.log_param("max_depth", args.max_depth)
