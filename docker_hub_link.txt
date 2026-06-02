@@ -12,10 +12,10 @@ https://hub.docker.com/r/nuris89/loan-approval-model
 # -----------------------------------------------------------------------
 # CARA PULL IMAGE
 # -----------------------------------------------------------------------
-# docker pull Nuris/loan-approval-model:latest
+# docker pull nuris89/loan-approval-model:latest
 
 # -----------------------------------------------------------------------
 # CARA MENJALANKAN SERVING VIA DOCKER
 # -----------------------------------------------------------------------
-# docker run -p 8080:8080 Nuris/loan-approval-model:latest
+# docker run -p 8080:8080 nuris89/loan-approval-model:latest
 # Endpoint: http://localhost:8080/invocations
