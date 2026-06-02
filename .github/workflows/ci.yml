@@ -42,7 +42,7 @@ jobs:
         shell: bash -el {0}
         run: |
           mlflow run MLProject/ \
-            --env-manager conda \
+            --env-manager local \
             -P data_path=../loan_approval_preprocessing.csv \
             -P n_estimators=200 \
             -P max_depth=10 \
