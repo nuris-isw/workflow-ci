@@ -126,7 +126,16 @@ def main():
         mlflow.log_artifact(cm_path, artifact_path="plots")
         mlflow.log_artifact(fi_path, artifact_path="plots")
 
-        mlflow.sklearn.log_model(model, artifact_path="model")
+        mlflow.sklearn.log_model(
+            model,
+            artifact_path="model",
+            pip_requirements=[
+                "mlflow==2.19.0",
+                "scikit-learn==1.5.2",
+                "pandas==2.2.3",
+                "numpy==1.26.4",
+            ]
+        )
 
         print("\n=== METRIK ===")
         for k, v in metrics.items():
