@@ -7,15 +7,15 @@
 # TAUTAN DOCKER HUB IMAGE
 # -----------------------------------------------------------------------
 # [GANTI dengan tautan Docker Hub Anda setelah workflow CI berjalan]
-https://hub.docker.com/r/NamaSiswa/loan-approval-model
+https://hub.docker.com/r/nuris89/loan-approval-model
 
 # -----------------------------------------------------------------------
 # CARA PULL IMAGE
 # -----------------------------------------------------------------------
-# docker pull NamaSiswa/loan-approval-model:latest
+# docker pull Nuris/loan-approval-model:latest
 
 # -----------------------------------------------------------------------
 # CARA MENJALANKAN SERVING VIA DOCKER
 # -----------------------------------------------------------------------
-# docker run -p 8080:8080 NamaSiswa/loan-approval-model:latest
+# docker run -p 8080:8080 Nuris/loan-approval-model:latest
 # Endpoint: http://localhost:8080/invocations
