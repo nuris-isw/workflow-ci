@@ -65,15 +65,24 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker Image via mlflow build-docker
+      - name: Build Docker Image (custom Dockerfile - Python 3.10)
         shell: bash -el {0}
         run: |
           RUN_ID=$(cat run_id.txt)
           echo "Run ID: $RUN_ID"
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
-          mlflow models build-docker \
-            -m "runs:/$RUN_ID/model" \
-            -n "${{ secrets.DOCKERHUB_USERNAME }}/loan-approval-model:latest"
+
+          # Download model artifacts dari MLflow tracking server
+          mlflow artifacts download \
+            --run-id "$RUN_ID" \
+            --artifact-path model \
+            --dst-path ./docker_build
+
+          # Build Docker image dengan Dockerfile custom (Python 3.10)
+          docker build \
+            -t "${{ secrets.DOCKERHUB_USERNAME }}/loan-approval-model:latest" \
+            -f Dockerfile \
+            ./docker_build
 
       - name: Push Docker Image to Docker Hub
         run: |
