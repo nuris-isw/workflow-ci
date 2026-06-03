@@ -16,11 +16,7 @@ import matplotlib.pyplot as plt
 
 import mlflow
 import mlflow.sklearn
-try:
-    import dagshub
-    HAS_DAGSHUB = True
-except ImportError:
-    HAS_DAGSHUB = False
+# dagshub package tidak diperlukan — autentikasi via MLFLOW_TRACKING_* env vars
 
 # DagsHub credentials dibaca dari env variable (di-set via GitHub Secrets)
 DAGSHUB_OWNER = os.environ.get("DAGSHUB_OWNER", "nuris-isw")
@@ -87,12 +83,14 @@ def main():
     )
     logger.info(f"Train: {X_train.shape[0]} | Test: {X_test.shape[0]}")
 
-    # Inisialisasi DagsHub tracking jika kredensial tersedia
-    if HAS_DAGSHUB and (os.environ.get("MLFLOW_TRACKING_PASSWORD") or os.environ.get("DAGSHUB_TOKEN")):
-        logger.info("Kredensial DagsHub ditemukan. Menginisialisasi tracking DagsHub...")
-        dagshub.init(repo_owner=DAGSHUB_OWNER, repo_name=DAGSHUB_REPO, mlflow=True)
+    # Gunakan MLFLOW_TRACKING_URI dari env var (di-set via GitHub Secrets)
+    # MLFLOW_TRACKING_USERNAME & MLFLOW_TRACKING_PASSWORD juga otomatis dibaca oleh MLflow
+    tracking_uri = os.environ.get("MLFLOW_TRACKING_URI")
+    if tracking_uri:
+        mlflow.set_tracking_uri(tracking_uri)
+        logger.info(f"MLflow tracking URI: {tracking_uri}")
     else:
-        logger.info("Kredensial DagsHub tidak ditemukan atau package dagshub tidak terinstall. Logging secara lokal...")
+        logger.info("MLFLOW_TRACKING_URI tidak ditemukan. Logging secara lokal...")
     mlflow.set_experiment("Loan_Approval_CI")
 
     with mlflow.start_run() as run:
