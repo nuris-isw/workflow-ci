@@ -91,7 +91,11 @@ def main():
         logger.info(f"MLflow tracking URI: {tracking_uri}")
     else:
         logger.info("MLFLOW_TRACKING_URI tidak ditemukan. Logging secara lokal...")
-    mlflow.set_experiment("Loan_Approval_CI")
+
+    # Experiment diatur via --experiment-name di mlflow run (ci.yml)
+    # Jika dijalankan langsung (bukan via mlflow run), set experiment manual
+    if not os.environ.get("MLFLOW_RUN_ID"):
+        mlflow.set_experiment("Loan_Approval_CI")
 
     with mlflow.start_run() as run:
         # Tulis run_id ke file agar dapat digunakan oleh GitHub Actions

@@ -40,6 +40,7 @@ jobs:
         run: |
           mlflow run MLProject/ \
             --env-manager local \
+            --experiment-name Loan_Approval_CI \
             -P data_path=../loan_approval_preprocessing.csv \
             -P n_estimators=200 \
             -P max_depth=10 \
