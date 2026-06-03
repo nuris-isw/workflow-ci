@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 
 import mlflow
 import mlflow.sklearn
+from mlflow.models import infer_signature
 # dagshub package tidak diperlukan — autentikasi via MLFLOW_TRACKING_* env vars
 
 # DagsHub credentials dibaca dari env variable (di-set via GitHub Secrets)
@@ -136,9 +137,13 @@ def main():
         mlflow.log_artifact(cm_path, artifact_path="plots")
         mlflow.log_artifact(fi_path, artifact_path="plots")
 
+        signature = infer_signature(X_train, y_pred)
+
         mlflow.sklearn.log_model(
             model,
             artifact_path="model",
+            signature=signature,
+            input_example=X_train.head(5),
             pip_requirements=[
                 "mlflow==2.19.0",
                 "scikit-learn==1.5.2",

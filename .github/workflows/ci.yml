@@ -73,7 +73,8 @@ jobs:
           echo "RUN_ID=$RUN_ID" >> $GITHUB_ENV
           mlflow models build-docker \
             -m "runs:/$RUN_ID/model" \
-            -n "${{ secrets.DOCKERHUB_USERNAME }}/loan-approval-model:latest"
+            -n "${{ secrets.DOCKERHUB_USERNAME }}/loan-approval-model:latest" \
+            --python-version 3.10
 
       - name: Push Docker Image to Docker Hub
         run: |
