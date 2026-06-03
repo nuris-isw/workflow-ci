@@ -139,17 +139,27 @@ def main():
 
         signature = infer_signature(X_train, y_pred)
 
+        conda_env = {
+            "name": "loan-approval-env",
+            "channels": ["defaults"],
+            "dependencies": [
+                "python=3.10",
+                "pip",
+                {"pip": [
+                    "mlflow==2.19.0",
+                    "scikit-learn==1.5.2",
+                    "pandas==2.2.3",
+                    "numpy==1.26.4",
+                ]}
+            ]
+        }
+
         mlflow.sklearn.log_model(
             model,
             artifact_path="model",
             signature=signature,
             input_example=X_train.head(5),
-            pip_requirements=[
-                "mlflow==2.19.0",
-                "scikit-learn==1.5.2",
-                "pandas==2.2.3",
-                "numpy==1.26.4",
-            ]
+            conda_env=conda_env,
         )
 
         print("\n=== METRIK ===")
